@@ -9,20 +9,12 @@ const books = [];
 //ROUTES
 app.get("/getbook",
     (request,response) => {
-        // const book = {
-        //     title: "LOTR",
-        //     author: "JRR Tolkein",
-        //     genre: "fantasy"
-        // };
         response.json(books)
     }
 )
 
 app.post("/addbook",
     (request,response) => {
-    // console.log(request.body.title);
-    // console.log(request.body.author);
-    // console.log(request.body.genre);
     const book = {
         title : request.body.title,
         author: request.body.author,
@@ -33,6 +25,51 @@ app.post("/addbook",
         msg: `${request.body.title} added to list of books`
     }
     response.json(responseMessage)
+    }
+)
+
+app.put("/updatebook",
+    (request, response) => {
+        function findbook(x) {
+            return x.title === request.body.title
+        }
+        const index = books.findIndex(findbook)
+        if (index !== -1) 
+        {
+            books[index].author = request.body.author
+            books[index].genre  = request.body.genre
+            responseMsg = {
+                msg: `author and genre updated for ${request.body.title}`
+            }
+        } else {
+            responseMsg = {
+                msg: `${request.body.title} not found`
+            }
+        }
+
+        response.json(responseMsg)
+    }
+)
+
+app.delete("/deletebook",
+    (request, response) => {
+        function findbook(x) {
+            return x.title === request.body.title
+        }
+        const index = books.findIndex(findbook)
+        if (index !== -1) 
+        {
+            books.splice(index,1)
+            responseMsg = {
+                msg: `${request.body.title} has been deleted`
+            }
+        } else {
+            responseMsg = {
+                msg: `${request.body.title} not found`
+            }
+        }
+
+        response.json(responseMsg)
     }
 )
 
